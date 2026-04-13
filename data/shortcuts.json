@@ -5,3 +5,10 @@
     "function":"Selects all text"
   },
 ]
+[
+  {
+    "name": "Ctrl-f",
+    "platform":"windows os",
+    "function":"find Text/item"
+  }
+]
