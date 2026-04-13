@@ -1,1 +1,7 @@
-
+[
+  {
+    "name": "Ctrl-a",
+    "platform":"windows os",
+    "function":"Selects all text"
+  },
+]
