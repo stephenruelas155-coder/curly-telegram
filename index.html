@@ -4,23 +4,52 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Keyboard Shortcuts Finder</title>
-  <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Keyboard Shortcuts Finder</h1>
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Search by shortcut or action..."
-    />
-    <div id="results"></div>
+    <header class="hero">
+      <h1>Keyboard Shortcuts Finder</h1>
+      <p class="subtitle">
+        Search and filter useful shortcuts collected from the class
+      </p>
+    </header>
+
+    <section class="controls">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by shortcut, action, or author..."
+      />
+
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="ctrl">Ctrl</button>
+        <button class="filter-btn" data-filter="alt">Alt</button>
+        <button class="filter-btn" data-filter="windows">Windows</button>
+        <button class="filter-btn" data-filter="other">Other</button>
+      </div>
+    </section>
+
+    <section class="stats">
+      <p id="statsText">Loading shortcuts...</p>
+    </section>
+
+    <div id="results" class="results-grid"></div>
   </div>
 
-  <footer class="bg-dark text-white text-center p-3 mt-5">
-      <a href="https://github.com/stephenruelas155-coder/curly-telegram" class="text-decoration-none text-muted" target="_blank"> repo </a>
+  <footer class="footer">
+    <p><strong>Team Members:</strong> Stephen Ruelas, Wansheng Wu</p>
+    <p>
+      <a
+        href="https://github.com/stephenruelas155-coder/curly-telegram"
+        target="_blank"
+      >
+        View Repository
+      </a>
+    </p>
   </footer>
-  
+
   <script src="scripts/script.js"></script>
 </body>
 </html>
