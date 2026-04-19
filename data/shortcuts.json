@@ -1,0 +1,117 @@
+ [
+  {
+    "shortcut": "Alt + Z",
+    "description": "Wrap around current line of code",
+    "author": "Poppy Dalton"
+  },
+  {
+    "shortcut": "Ctrl + S",
+    "description": "Save current file",
+    "author": "Anna Patillo"
+  },
+  {
+    "shortcut": "Ctrl + /",
+    "description": "Comment Code",
+    "author": "Shion Kishaba"
+  },
+  {
+    "shortcut": "Ctrl + P",
+    "description": "Paste",
+    "author": "Carina Estrada"
+  },
+  {
+    "shortcut": "Windows + Printscreen",
+    "description": "Screenshot all visible screens at once",
+    "author": "Jasmine Morgan"
+  },
+  {
+    "shortcut": "Ctrl + C",
+    "description": "Copy",
+    "author": "Anthony Guerrero"
+  },
+  {
+    "shortcut": "Ctrl + Z",
+    "description": "Undo",
+    "author": "AJ Ramsden"
+  },
+  {
+    "shortcut": "Ctrl + Shift + K",
+    "description": "Replace",
+    "author": "Garett Clark "
+  },
+  {
+    "shortcut": "Ctrl + H",
+    "description": "Delete Line",
+    "author": "Christian Miller"
+  },
+  {
+    "shortcut": "Ctrl + A",
+    "description": "Highlights all text",
+    "author": "Stephen Ruelas"
+  },
+  {
+    "shortcut": "Ctrl + F",
+    "description": "Find in document",
+    "author": "Wansheng Wu"
+  },
+  {
+    "shortcut": "Ctrl + T",
+    "description": "Add a new tab",
+    "author": "Isabella O’Rear"
+  },
+  {
+    "shortcut": "Alt + Tab",
+    "description": "Switch between tabs",
+    "author": "Tylan Miller"
+  },
+  {
+    "shortcut": "Alt + F4",
+    "description": "Close active window",
+    "author": "Nang Khin La Pyae"
+  },
+  {
+    "shortcut": "Windows + Shift + F",
+    "description": "Take a screenshot",
+    "author": "Maddox Dorning"
+  },
+  {
+    "shortcut": "Ctrl + Shift + Tab",
+    "description": "Backward on windows",
+    "author": "Mitchell Chaffee"
+  },
+  {
+    "shortcut": "Windows + .",
+    "description": "Special Characters",
+    "author": "Reid Kuhlers"
+  },
+  {
+    "shortcut": "Alt + Shift + F",
+    "description": "formatting",
+    "author": "Thomas Brakefield"
+  },
+  {
+    "shortcut": "Ctrl + Shift + Esc",
+    "description": "Open task manager",
+    "author": "Brody Hilliard"
+  },
+  {
+    "shortcut": "Shift + Alt + F",
+    "description": "Format document",
+    "author": "Hassan Alnabres"
+  },
+  {
+    "shortcut": "Ctrl + Alt + Delete",
+    "description": "Open sign out menu",
+    "author": "Sean Clary"
+  },
+  {
+    "shortcut": "Shift + Option + S",
+    "description": "Create getters and setters",
+    "author": "Eric Staggs"
+  },
+  {
+    "shortcut": "Ctrl + R",
+    "description": "Refresh Page",
+    "author": "Griffin Turner"
+  }
+]
