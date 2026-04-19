@@ -1,0 +1,56 @@
+const resultsDiv = document.getElementById("results");
+const searchInput = document.getElementById("searchInput");
+
+let shortcuts = [];
+
+// Load JSON data with Fetch API
+async function loadShortcuts() {
+  try {
+    const response = await fetch("shortcuts.json");
+    shortcuts = await response.json();
+    displayShortcuts(shortcuts);
+  } catch (error) {
+    resultsDiv.innerHTML = `<p class="no-results">Failed to load shortcut data.</p>`;
+    console.error("Error loading JSON:", error);
+  }
+}
+
+// Show shortcuts on page
+function displayShortcuts(data) {
+  resultsDiv.innerHTML = "";
+
+  if (data.length === 0) {
+    resultsDiv.innerHTML = `<p class="no-results">No shortcuts found.</p>`;
+    return;
+  }
+
+  data.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="shortcut">${item.shortcut}</div>
+      <div class="action"><strong>${item.action}</strong></div>
+      <div>${item.description}</div>
+      <div class="owner">Added by: ${item.name}</div>
+    `;
+
+    resultsDiv.appendChild(card);
+  });
+}
+
+// Search function
+searchInput.addEventListener("input", () => {
+  const keyword = searchInput.value.toLowerCase();
+
+  const filtered = shortcuts.filter(item =>
+    item.shortcut.toLowerCase().includes(keyword) ||
+    item.action.toLowerCase().includes(keyword) ||
+    item.description.toLowerCase().includes(keyword) ||
+    item.name.toLowerCase().includes(keyword)
+  );
+
+  displayShortcuts(filtered);
+});
+
+loadShortcuts();
