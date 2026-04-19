@@ -1,163 +1,98 @@
-* {
-  box-sizing: border-box;
-}
+const resultsDiv = document.getElementById("results");
+const searchInput = document.getElementById("searchInput");
+const statsText = document.getElementById("statsText");
+const filterButtons = document.querySelectorAll(".filter-btn");
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 30px 20px;
-  background: linear-gradient(135deg, #eef2ff, #f8fafc);
-  color: #1f2937;
-}
+let shortcuts = [];
+let currentFilter = "all";
 
-.container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.hero {
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.hero h1 {
-  margin-bottom: 10px;
-  font-size: 2.2rem;
-}
-
-.subtitle {
-  color: #6b7280;
-  font-size: 1rem;
-}
-
-.controls {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  margin-bottom: 20px;
-}
-
-#searchInput {
-  width: 100%;
-  padding: 14px 16px;
-  font-size: 16px;
-  margin-bottom: 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 12px;
-  outline: none;
-}
-
-#searchInput:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
-
-.filter-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.filter-btn {
-  border: none;
-  padding: 10px 16px;
-  border-radius: 999px;
-  background: #e5e7eb;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s ease;
-}
-
-.filter-btn:hover {
-  transform: translateY(-1px);
-}
-
-.filter-btn.active {
-  background: #2563eb;
-  color: white;
-}
-
-.stats {
-  margin-bottom: 16px;
-  color: #4b5563;
-  font-weight: 600;
-}
-
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-}
-
-.card {
-  background: white;
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
-}
-
-.shortcut {
-  display: inline-block;
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #1d4ed8;
-  background: #eff6ff;
-  padding: 8px 12px;
-  border-radius: 10px;
-}
-
-.action {
-  margin-top: 14px;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.owner {
-  margin-top: 10px;
-  color: #6b7280;
-  font-size: 0.95rem;
-}
-
-.no-results {
-  grid-column: 1 / -1;
-  text-align: center;
-  color: #6b7280;
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.footer {
-  max-width: 1000px;
-  margin: 30px auto 0;
-  text-align: center;
-  color: #4b5563;
-}
-
-.footer a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.footer a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 600px) {
-  body {
-    padding: 20px 14px;
-  }
-
-  .hero h1 {
-    font-size: 1.8rem;
+// Load JSON data with Fetch API
+async function loadShortcuts() {
+  try {
+    const response = await fetch("data/shortcuts.json");
+    shortcuts = await response.json();
+    applyFilters();
+  } catch (error) {
+    resultsDiv.innerHTML = `<p class="no-results">Failed to load shortcut data.</p>`;
+    statsText.textContent = "Could not load data.";
+    console.error("Error loading JSON:", error);
   }
 }
+
+// Show shortcuts on page
+function displayShortcuts(data) {
+  resultsDiv.innerHTML = "";
+
+  if (data.length === 0) {
+    resultsDiv.innerHTML = `<p class="no-results">No shortcuts found.</p>`;
+    return;
+  }
+
+  data.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="shortcut">${item.shortcut}</div>
+      <div class="action">${item.description}</div>
+      <div class="owner">Added by: ${item.author}</div>
+    `;
+
+    resultsDiv.appendChild(card);
+  });
+}
+
+// Filter by button type
+function matchesFilter(item, filter) {
+  const shortcutText = (item.shortcut || "").toLowerCase();
+
+  if (filter === "all") return true;
+  if (filter === "ctrl") return shortcutText.includes("ctrl");
+  if (filter === "alt") return shortcutText.includes("alt");
+  if (filter === "windows") return shortcutText.includes("windows") || shortcutText.includes("win");
+
+  if (filter === "other") {
+    return (
+      !shortcutText.includes("ctrl") &&
+      !shortcutText.includes("alt") &&
+      !shortcutText.includes("windows") &&
+      !shortcutText.includes("win")
+    );
+  }
+
+  return true;
+}
+
+// Apply search + filter together
+function applyFilters() {
+  const keyword = searchInput.value.toLowerCase().trim();
+
+  const filtered = shortcuts.filter((item) => {
+    const matchesSearch =
+      (item.shortcut || "").toLowerCase().includes(keyword) ||
+      (item.description || "").toLowerCase().includes(keyword) ||
+      (item.author || "").toLowerCase().includes(keyword);
+
+    const matchesCategory = matchesFilter(item, currentFilter);
+
+    return matchesSearch && matchesCategory;
+  });
+
+  statsText.textContent = `Showing ${filtered.length} of ${shortcuts.length} shortcuts`;
+  displayShortcuts(filtered);
+}
+
+// Search input
+searchInput.addEventListener("input", applyFilters);
+
+// Filter buttons
+filterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    filterButtons.forEach((btn) => btn.classList.remove("active"));
+    button.classList.add("active");
+    currentFilter = button.dataset.filter;
+    applyFilters();
+  });
+});
+
+loadShortcuts();
