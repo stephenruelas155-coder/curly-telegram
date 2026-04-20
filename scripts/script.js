@@ -1,22 +1,23 @@
-console.log("JS loaded");
 const resultsDiv = document.getElementById("results");
 const searchInput = document.getElementById("searchInput");
+const statsText = document.getElementById("statsText");
+const filterButtons = document.querySelectorAll(".filter-btn");
 
 let shortcuts = [];
+let currentFilter = "all";
 
-// Load JSON data with Fetch API
 async function loadShortcuts() {
   try {
     const response = await fetch("data/shortcuts.json");
     shortcuts = await response.json();
-    displayShortcuts(shortcuts);
+    applyFilters();
   } catch (error) {
     resultsDiv.innerHTML = `<p class="no-results">Failed to load shortcut data.</p>`;
+    statsText.textContent = "Could not load data.";
     console.error("Error loading JSON:", error);
   }
 }
 
-// Show shortcuts on page
 function displayShortcuts(data) {
   resultsDiv.innerHTML = "";
 
@@ -25,7 +26,7 @@ function displayShortcuts(data) {
     return;
   }
 
-  data.forEach(item => {
+  data.forEach((item) => {
     const card = document.createElement("div");
     card.className = "card";
 
@@ -39,25 +40,57 @@ function displayShortcuts(data) {
   });
 }
 
-// Search function
-searchInput.addEventListener("input", () => {
+function matchesFilter(item, filter) {
+  const shortcutText = (item.shortcut || "").toLowerCase();
 
-//if (!shortcuts.length) return;
+  if (filter === "all") return true;
+  if (filter === "ctrl") return shortcutText.includes("ctrl");
+  if (filter === "alt") return shortcutText.includes("alt");
+  if (filter === "windows") {
+    return shortcutText.includes("windows") || shortcutText.includes("win");
+  }
+  if (filter === "other") {
+    return (
+      !shortcutText.includes("ctrl") &&
+      !shortcutText.includes("alt") &&
+      !shortcutText.includes("windows") &&
+      !shortcutText.includes("win")
+    );
+  }
 
-  const keyword = searchInput.value.toLowerCase();
+  return true;
+}
 
-  console.log("Typed:", keyword);
-  console.log("Shortcuts loaded:", shortcuts.length);
+function applyFilters() {
+  const keyword = searchInput.value.toLowerCase().trim();
 
-  const filtered = shortcuts.filter(item =>
-    (item.shortcut || "").toLowerCase().includes(keyword) ||
-    (item.description || "").toLowerCase().includes(keyword) ||
-    (item.author || "").toLowerCase().includes(keyword)
-  );
+  const filtered = shortcuts.filter((item) => {
+    const matchesSearch =
+      (item.shortcut || "").toLowerCase().includes(keyword) ||
+      (item.description || "").toLowerCase().includes(keyword) ||
+      (item.author || "").toLowerCase().includes(keyword);
 
-  console.log("Filtered results:", filtered.length);
+    const matchesCategory = matchesFilter(item, currentFilter);
 
+    return matchesSearch && matchesCategory;
+  });
+
+  statsText.textContent = `Showing ${filtered.length} of ${shortcuts.length} shortcuts`;
   displayShortcuts(filtered);
+}
+
+searchInput.addEventListener("input", applyFilters);
+
+filterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    filterButtons.forEach((btn) => btn.classList.remove("active"));
+    button.classList.add("active");
+    currentFilter = button.dataset.filter;
+    applyFilters();
+  });
+});
+
+loadShortcuts();
 });
 
 loadShortcuts();
