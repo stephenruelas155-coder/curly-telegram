@@ -91,5 +91,3 @@ filterButtons.forEach((button) => {
 });
 
 loadShortcuts();
-
-loadShortcuts();
